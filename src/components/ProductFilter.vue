@@ -43,108 +43,24 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет</legend>
               <ul class="colors">
-                <li class="colors__item">
-                  <label for="radio1" class="colors__label">
+                <li class="colors__item" v-for="color in colors" :key="color.id">
+                  <label for="color.id" class="colors__label">
                     <input
-                     id="radio1"
+                     id="color.id"
+
                       class="colors__radio sr-only"
                       type="radio"
                       name="color"
-                      value="#73B6EA"
-                      checked=""
+                      value="color.value"
                     />
                     <span
                       class="colors__value"
-                      style="background-color: #73b6ea"
+                      style="background-color: #fff"
                     >
                     </span>
                   </label>
                 </li>
-                <li class="colors__item">
-                  <label for="color1" class="colors__label">
-                    <input
-                     id="color1"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color"
-                      value="#FFBE15"
-                    />
-                    <span
-                      class="colors__value"
-                      style="background-color: #ffbe15"
-                    >
-                    </span>
-                  </label>
-                </li>
-                <li class="colors__item">
-                  <label for="color2" class="colors__label">
-                    <input
-                     id="color2"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color"
-                      value="#939393" />
-                    <span
-                      class="colors__value"
-                      style="background-color: #939393"
-                    >
-                    </span
-                  ></label>
-                </li>
-                <li class="colors__item">
-                  <label for="radio2" class="colors__label">
-                    <input
-                     id="radio2"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color"
-                      value="#8BE000" />
-                    <span
-                      class="colors__value"
-                      style="background-color: #8be000"
-                    >
-                    </span
-                  ></label>
-                </li>
-                <li class="colors__item">
-                  <label for="color3" class="colors__label">
-                    <input
-                    id="color3"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color"
-                      value="#FF6B00" />
-                    <span
-                      class="colors__value"
-                      style="background-color: #ff6b00"
-                    >
-                    </span
-                  ></label>
-                </li>
-                <li class="colors__item">
-                  <label for="color4" class="colors__label">
-                    <input
-                     id="color4"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color"
-                      value="#FFF" />
-                    <span class="colors__value" style="background-color: #fff">
-                    </span
-                  ></label>
-                </li>
-                <li class="colors__item">
-                  <label for="color5" class="colors__label">
-                    <input
-                     for="color5"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color"
-                      value="#000" />
-                    <span class="colors__value" style="background-color: #000">
-                    </span
-                  ></label>
-                </li>
+
               </ul>
             </fieldset>
 
@@ -258,6 +174,7 @@
 
 <script>
 import categories from '../data/categories';
+import colors from '../data/colors';
 
 export default {
   data() {
@@ -272,6 +189,9 @@ export default {
     categories() {
       return categories;
     },
+    colors() {
+      return colors;
+    },
   },
   watch: {
     priceFrom(value) {
@@ -283,17 +203,22 @@ export default {
     categoryId(value) {
       this.currentCategoryId = value;
     },
+    color(value) {
+      this.currentColor = value;
+    },
   },
   methods: {
     submit() {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
+      this.$emit('update:color', this.currentColor);
     },
     reset() {
       this.$emit('update:priceFrom', 0);
       this.$emit('update:priceTo', 0);
       this.$emit('update:categoryId', 0);
+      this.$emit('update:color', 0);
     },
   },
 };

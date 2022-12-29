@@ -1,7 +1,8 @@
 <template>
 <span>
 <li class="catalog__item">
-              <a class="catalog__pic" href="#">
+              <a class="catalog__pic" href="#"
+               @click.prevent="$emit('gotoPage', 'product', {id: product.id})">
                 <img :src="product.image" :alt="product.title"
                 />
               </a>
@@ -11,9 +12,9 @@
               <span class="catalog__price"> {{ product.price }} ₽ </span>
               <ul class="colors colors--black">
                 <li class="colors__item">
-                  <label for="radio1" class="colors__label">
+                  <label for="#73B6EA" class="colors__label">
                     <input
-                      id="radio1"
+                      id="#73B6EA"
                       class="colors__radio sr-only"
                       type="radio"
                       value="#73B6EA" v-model="color"
@@ -26,9 +27,9 @@
                   </label>
                 </li>
                 <li class="colors__item">
-                  <label for="radio2" class="colors__label">
+                  <label for="#8BE000" class="colors__label">
                     <input
-                      id="radio2"
+                      id="#8BE000"
                       class="colors__radio sr-only"
                       type="radio"
                       value="#8BE000" v-model="color"
@@ -41,9 +42,9 @@
                   </label>
                 </li>
                 <li class="colors__item">
-                   <label for="radio3" class="colors__label">
+                   <label for="#000" class="colors__label">
                     <input
-                      id="radio3"
+                      id="#000"
                       class="colors__radio sr-only"
                       type="radio"
                       value="#000" v-model="color"
