@@ -44,18 +44,18 @@
               <legend class="form__legend">Цвет</legend>
               <ul class="colors">
                 <li class="colors__item" v-for="color in colors" :key="color.id">
-                  <label for="color.id" class="colors__label">
+                  <label :for="color.id" class="colors__label">
                     <input
-                     id="color.id"
-
+                     :id="color.id"
+                       v-model="currentColor"
                       class="colors__radio sr-only"
                       type="radio"
                       name="color"
-                      value="color.value"
+                      :value="color.value"
                     />
                     <span
                       class="colors__value"
-                      style="background-color: #fff"
+                      :style="`background-color: ${color.value}`"
                     >
                     </span>
                   </label>
@@ -182,9 +182,10 @@ export default {
       currentPriceFrom: 0,
       currentPriceTo: 0,
       currentCategoryId: 0,
+      currentColor: 0,
     };
   },
-  props: ['priceFrom', 'priceTo', 'categoryId'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
   computed: {
     categories() {
       return categories;

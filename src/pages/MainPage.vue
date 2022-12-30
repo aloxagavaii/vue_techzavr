@@ -10,8 +10,7 @@
          :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId"
           :color.sync="filterColors"/>
         <section class="catalog">
-         <ProductList :products="products"
-          @gotoPage="(pageName, pageParams) => $emit('gotoPage', pageName, pageParams)"/>
+         <ProductList :products="products"/>
          <BasePagination v-model="page" :count="countProducts"
          :per-page="productsPerPage"></BasePagination>
         </section>

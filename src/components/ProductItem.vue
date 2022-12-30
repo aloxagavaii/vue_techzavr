@@ -2,14 +2,14 @@
 <span>
 <li class="catalog__item">
               <a class="catalog__pic" href="#"
-               @click.prevent="$emit('gotoPage', 'product', {id: product.id})">
+               @click.prevent="gotoPage('product', {id: product.id})">
                 <img :src="product.image" :alt="product.title"
                 />
               </a>
               <h3 class="catalog__title">
                 <a href="#"> {{product.title}} </a>
               </h3>
-              <span class="catalog__price"> {{ product.price }} ₽ </span>
+              <span class="catalog__price"> {{ product.price | numberFormat }} ₽ </span>
               <ul class="colors colors--black">
                 <li class="colors__item">
                   <label for="#73B6EA" class="colors__label">
@@ -21,7 +21,7 @@
                     />
                     <span
                       class="colors__value"
-                      style="background-color: #73b6ea"
+                      style="background-color: #73b6ea;"
                     >
                     </span>
                   </label>
@@ -36,7 +36,7 @@
                     />
                     <span
                       class="colors__value"
-                      style="background-color: #8be000"
+                      style="background-color: #8be000;"
                     >
                     </span>
                   </label>
@@ -47,23 +47,31 @@
                       id="#000"
                       class="colors__radio sr-only"
                       type="radio"
-                      value="#000" v-model="color"
+                      value="#222" v-model="color"
                     />
-                    <span class="colors__value" style="background-color: #000">
+                    <span class="colors__value" style="background-color: #222;">
                     </span>
                   </label>
-
                 </li>
               </ul>
             </li>
 </span>
 </template>
 <script>
+import gotoPage from '@/helpers/gotoPage';
+import numberFormat from '@/helpers/numberFormat';
+
 export default {
   data() {
     return {
       color: '#73B6EA',
     };
+  },
+  filters: {
+    numberFormat,
+  },
+  methods: {
+    gotoPage,
   },
   props: ['product'],
 
