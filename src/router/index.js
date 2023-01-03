@@ -3,14 +3,14 @@ import VueRouter from 'vue-router';
 import MainPage from '@/pages/MainPage.vue';
 import NotFoundPage from '@/pages/NotFoundPage.vue';
 import ProductPage from '@/pages/ProductPage.vue';
-import cartPage from '@/pages/cartPage.vue';
+import CartPage from '@/pages/CartPage.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   { name: 'main', component: MainPage, path: '/' },
   { name: 'product', component: ProductPage, path: '/product/:id' },
-  { name: 'cart', component: cartPage, path: '/cart' },
+  { name: 'cart', component: CartPage, path: '/cart' },
   { name: 'notFound', component: NotFoundPage, path: '*' },
 ];
 

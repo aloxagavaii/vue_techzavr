@@ -2,7 +2,7 @@
 <span>
 <li class="catalog__item">
               <router-link class="catalog__pic"
-               :to="{name: 'product', params: {id: product.id}}">
+               :to="{ name: 'product', params: { id: product.id } }">
                 <img :src="product.image" :alt="product.title"
                 />
               </router-link>

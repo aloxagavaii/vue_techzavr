@@ -14,7 +14,9 @@
         </a>
 
         <a class="header__tel" href="tel:8 800 600 90 09"> 8 800 600 90 09 </a>
-         <CartIndicator/>
+
+    <CartIndicator/>
+
       </div>
   </header>
 
