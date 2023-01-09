@@ -1,5 +1,7 @@
 <template>
-  <main class="content container">
+  <main class="content container" v-if="productLoading">Загрузка товара</main>
+  <main class="content container" v-else-if="!productData">не удалось за...</main>
+  <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -121,10 +123,12 @@
                 </button>
               </div>
 
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
             </div>
+            <div v-show="productAdded">добавлен в корзину</div>
+            <div v-show="productAddSending">идет добавление</div>
           </form>
         </div>
       </div>
@@ -203,15 +207,20 @@
 </template>
 
 <script>
-import products from '@/data/products';
-import categories from '@/data/categories';
 import gotoPage from '@/helpers/gotoPage';
 import numberFormat from '@/helpers/numberFormat';
+import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       productAmount: 1,
+      productData: null,
+      productLoading: false,
+      productLoadingFailed: false,
+      productAdded: false,
+      productAddSending: false,
     };
   },
   filters: {
@@ -219,19 +228,49 @@ export default {
   },
   computed: {
     product() {
-      return products.find((product) => product.id === +this.$route.params.id);
+      return this.productData.map((product) => ({
+        ...product,
+        image: product.image.file.url,
+      }));
     },
     category() {
-      return categories.find((category) => category.id === this.product.categoryId);
+      return this.productData.category;
     },
   },
   methods: {
+    ...mapActions(['addProductToCart']),
     gotoPage,
+
     addToCart() {
-      this.$store.commit(
-        'addProductToCart',
-        { productId: this.product.id, amount: this.productAmount },
-      );
+      this.productAdded = false;
+      this.productAddSending = true;
+
+      this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+        .then(() => {
+          this.productAdded = true;
+          this.productAddSending = false;
+        });
+    },
+    loadProduct() {
+      this.productLoading = true;
+      this.productLoadingFailed = false;
+      // eslint-disable-next-line prefer-template
+      axios.get('https://vue-study.skillbox.cc/api/products/' + this.$route.params.id)
+        .then((response) => { this.productData = response.data; })
+        .catch(() => { this.productLoadingFailed = true; })
+        .then(() => { this.productLoading = false; });
+    },
+  },
+  created() {
+    this.loadProduct();
+  },
+  watch: {
+    // eslint-disable-next-line
+    '$route.params.id': {
+      handler() {
+        this.loadProduct();
+      },
+      imediate: true,
     },
   },
 };

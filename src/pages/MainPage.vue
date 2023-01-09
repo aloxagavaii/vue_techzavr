@@ -10,6 +10,11 @@
          :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId"
           :color.sync="filterColors"/>
         <section class="catalog">
+
+          <div v-if="productsLoading">Загрузка товаров...</div>
+          <div v-if="productsLoadingFailed">ошибка<button
+           @click.prevent="loadProducts">еще одна попытка</button></div>
+
          <ProductList :products="products"/>
          <BasePagination v-model="page" :count="countProducts"
          :per-page="productsPerPage"></BasePagination>
@@ -20,10 +25,10 @@
 </template>
 
 <script>
-import products from '@/data/products';
 import ProductList from '@/components/ProductList.vue';
 import BasePagination from '@/components/BasePagination.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
+import axios from 'axios';
 
 export default {
   components: { ProductList, BasePagination, ProductFilter },
@@ -35,32 +40,64 @@ export default {
       filterColors: 0,
       page: 1,
       productsPerPage: 3,
+      productsData: null,
+      productsLoading: false,
+      productsLoadingFailed: false,
     };
   },
   computed: {
-    filProds() {
-      let filProds = products;
-      if (this.filterPriceFrom > 0) {
-        filProds = filProds.filter((product) => product.price > this.filterPriceFrom);
-      }
-      if (this.filterPriceTo > 0) {
-        filProds = filProds.filter((product) => product.price < this.filterPriceTo);
-      }
-      if (this.filterCategoryId) {
-        filProds = filProds.filter((product) => product.categoryId === this.filterCategoryId);
-      }
-      if (this.filterColors) {
-        filProds = filProds.filter((product) => product.color === this.filterColors);
-      }
-      return filProds;
-    },
     products() {
-      const offset = (this.page - 1) * this.productsPerPage;
-      return this.filProds.slice(offset, offset + this.productsPerPage);
+      return this.productsData
+        ? this.productsData.items.map((product) => ({
+          ...product,
+          image: product.image.file.url,
+        })) : [];
     },
     countProducts() {
-      return this.filProds.length;
+      return this.productsData ? this.productsData.pagination.total : 0;
     },
+  },
+  methods: {
+    loadProducts() {
+      this.productsLoading = true;
+      this.productsLoadingFailed = false;
+      clearTimeout(this.loadProductsTimer);
+      this.loadProductsTimer = setTimeout(() => {
+        axios.get('https://vue-study.skillbox.cc/api/products', {
+          params: {
+            page: this.page,
+            limit: this.productsPerPage,
+            categoryId: this.filterCategoryId,
+            minPrice: this.filterPriceFrom,
+            maxPrice: this.filterPriceTo,
+            colorId: this.filterColors,
+          },
+        })
+          .then((response) => { this.productsData = response.data; })
+          .catch(() => { this.productsLoadingFailed = true; })
+          .then(() => { this.productsLoading = false; });
+      }, 0);
+    },
+  },
+  watch: {
+    page() {
+      this.loadProducts();
+    },
+    filterPriceFrom() {
+      this.loadProducts();
+    },
+    filterPriceTo() {
+      this.loadProducts();
+    },
+    filterCategoryId() {
+      this.loadProducts();
+    },
+    filterColors() {
+      this.loadProducts();
+    },
+  },
+  created() {
+    this.loadProducts();
   },
 };
 </script>

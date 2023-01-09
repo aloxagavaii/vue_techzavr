@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import categories from '../data/categories';
+import axios from 'axios';
 import colors from '../data/colors';
 
 export default {
@@ -183,12 +183,13 @@ export default {
       currentPriceTo: 0,
       currentCategoryId: 0,
       currentColor: 0,
+      categoriesData: null,
     };
   },
   props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
   computed: {
     categories() {
-      return categories;
+      return this.categoriesData ? this.categoriesData.items : [];
     },
     colors() {
       return colors;
@@ -221,6 +222,13 @@ export default {
       this.$emit('update:categoryId', 0);
       this.$emit('update:color', 0);
     },
+    loadCategories() {
+      axios.get('https://vue-study.skillbox.cc/api/productCategories')
+        .then((response) => { this.categoriesData = response.data; });
+    },
+  },
+  created() {
+    this.loadCategories();
   },
 };
 </script>
