@@ -11,45 +11,18 @@
               </h3>
               <span class="catalog__price"> {{ product.price | numberFormat }} ₽ </span>
               <ul class="colors colors--black">
-                <li class="colors__item">
-                  <label for="#73B6EA" class="colors__label">
+                <li class="colors__item" v-for="color in product.colors" :key="color.id">
+                  <label for="color.id" class="colors__label">
                     <input
-                      id="#73B6EA"
+                      id="color.id"
                       class="colors__radio sr-only"
                       type="radio"
-                      value="#73B6EA" v-model="color"
+                      :value="color.code"
                     />
                     <span
                       class="colors__value"
-                      style="background-color: #73b6ea;"
+                      :style="`background-color: ${color.code}`"
                     >
-                    </span>
-                  </label>
-                </li>
-                <li class="colors__item">
-                  <label for="#8BE000" class="colors__label">
-                    <input
-                      id="#8BE000"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      value="#8BE000" v-model="color"
-                    />
-                    <span
-                      class="colors__value"
-                      style="background-color: #8be000;"
-                    >
-                    </span>
-                  </label>
-                </li>
-                <li class="colors__item">
-                   <label for="#000" class="colors__label">
-                    <input
-                      id="#000"
-                      class="colors__radio sr-only"
-                      type="radio"
-                      value="#222" v-model="color"
-                    />
-                    <span class="colors__value" style="background-color: #222;">
                     </span>
                   </label>
                 </li>
@@ -64,7 +37,7 @@ import numberFormat from '@/helpers/numberFormat';
 export default {
   data() {
     return {
-      color: '#73B6EA',
+
     };
   },
   filters: {

@@ -2,13 +2,13 @@
 <main class="content container">
       <div class="content__top content__top--catalog">
         <h1 class="content__title">Каталог</h1>
-        <span class="content__info"> 152 товара </span>
+        <span class="content__info"> {{ countProducts }} товар </span>
       </div>
 
       <div class="content__catalog">
         <ProductFilter :price-from.sync="filterPriceFrom"
          :price-to.sync="filterPriceTo" :category-id.sync="filterCategoryId"
-          :color.sync="filterColors"/>
+          :color-id.sync="filterColors"/>
         <section class="catalog">
 
           <div v-if="productsLoading">Загрузка товаров...</div>

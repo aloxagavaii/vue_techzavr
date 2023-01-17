@@ -12,8 +12,14 @@
               </span>
 
               <div class="product__counter form__counter">
-                <button v-show="amount > 0" type="button"
+                <button v-if="amount > 1" type="button"
                  aria-label="Убрать один товар" @click="amount--">
+                  <svg width="10" height="10" fill="currentColor">
+                    <use xlink:href="#icon-minus"></use>
+                  </svg>
+                </button>
+                <button v-else type="button"
+                 aria-label="Убрать один товар" disabled>
                   <svg width="10" height="10" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
@@ -46,7 +52,7 @@
 
 <script>
 import numberFormat from '@/helpers/numberFormat';
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   filters: { numberFormat },
@@ -62,7 +68,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations({ deleteProduct: 'deleteCartProduct' }),
+    ...mapActions({ deleteProduct: 'deleteCartProduct' }),
   },
 };
 </script>

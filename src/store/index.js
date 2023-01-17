@@ -37,7 +37,8 @@ export default new Vuex.Store({
   getters: {
     cartDetailProducts(state) {
       return state.cartProducts.map((item) => {
-        const { product } = state.cartProductsData.find((p) => p.product.id === item.productId);
+        // eslint-disable-next-line prefer-destructuring
+        const product = state.cartProductsData.find((p) => p.product.id === item.productId).product;
 
         return {
           ...item,
@@ -111,17 +112,13 @@ export default new Vuex.Store({
     deleteCartProduct(context, productId) {
       context.commit('deleteCartProduct', productId);
       return axios
-        .put('https://vue-study.skillbox.cc/api/baskets/products', {
-          productId,
-        }, {
+        .delete('https://vue-study.skillbox.cc/api/baskets/products', productId, {
           params: {
             userAccessKey: context.state.userAccessKey,
           },
         })
         .then((response) => {
-          context.commit('deleteCartProduct', response.data.items);
-        })
-        .catch(() => {
+          context.commit('updateCartProductsData', response.data.items);
           context.commit('syncCartProducts');
         });
     },

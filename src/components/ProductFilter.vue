@@ -43,19 +43,19 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет</legend>
               <ul class="colors">
-                <li class="colors__item" v-for="color in colors" :key="color.id">
+                <li class="colors__item" v-for="color in ucolors" :key="color.id">
                   <label :for="color.id" class="colors__label">
                     <input
                      :id="color.id"
-                       v-model="currentColor"
+                       v-model.number="currentColor"
                       class="colors__radio sr-only"
                       type="radio"
                       name="color"
-                      :value="color.value"
+                      :value="color.id"
                     />
                     <span
                       class="colors__value"
-                      :style="`background-color: ${color.value}`"
+                      :style="`background-color: ${color.code}`"
                     >
                     </span>
                   </label>
@@ -174,7 +174,6 @@
 
 <script>
 import axios from 'axios';
-import colors from '../data/colors';
 
 export default {
   data() {
@@ -184,15 +183,16 @@ export default {
       currentCategoryId: 0,
       currentColor: 0,
       categoriesData: null,
+      colorsData: null,
     };
   },
-  props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'colorId'],
   computed: {
     categories() {
       return this.categoriesData ? this.categoriesData.items : [];
     },
-    colors() {
-      return colors;
+    ucolors() {
+      return this.colorsData ? this.colorsData.items : [];
     },
   },
   watch: {
@@ -205,7 +205,7 @@ export default {
     categoryId(value) {
       this.currentCategoryId = value;
     },
-    color(value) {
+    colorId(value) {
       this.currentColor = value;
     },
   },
@@ -214,21 +214,26 @@ export default {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
-      this.$emit('update:color', this.currentColor);
+      this.$emit('update:colorId', this.currentColor);
     },
     reset() {
       this.$emit('update:priceFrom', 0);
       this.$emit('update:priceTo', 0);
       this.$emit('update:categoryId', 0);
-      this.$emit('update:color', 0);
+      this.$emit('update:colorId', 0);
     },
     loadCategories() {
       axios.get('https://vue-study.skillbox.cc/api/productCategories')
         .then((response) => { this.categoriesData = response.data; });
     },
+    loadColors() {
+      axios.get('https://vue-study.skillbox.cc/api/colors')
+        .then((response) => { this.colorsData = response.data; });
+    },
   },
   created() {
     this.loadCategories();
+    this.loadColors();
   },
 };
 </script>

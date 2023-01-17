@@ -25,7 +25,7 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <img width="570" height="570" :src="product.image" :alt="product.title">
+          <img width="570" height="570" :src="product.image.file.url" :alt="product.title">
         </div>
       </div>
 
@@ -43,28 +43,14 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
               <ul class="colors">
-                <li class="colors__item">
-                  <label for="#73B6EA" class="colors__label">
-                    <input id="#73B6EA" class="colors__radio sr-only" type="radio"
-                     name="color-item" value="blue" checked="">
-                    <span class="colors__value" style="background-color: #73B6EA;">
+                <li class="colors__item" v-for="color in myColor" :key="color.id">
+                  <label :for="color.id" class="colors__label">
+                    <input :id="color.id" class="colors__radio sr-only" type="radio"
+                     name="color-item" :value="color.code">
+                    <span class="colors__value"
+                     :style="`background-color: ${color.code}`">
                     </span>
                   </label>
-                </li>
-                <li class="colors__item">
-                  <label for="color1" class="colors__label">
-                    <input id="color1" class="colors__radio sr-only" type="radio"
-                     name="color-item" value="yellow">
-                    <span class="colors__value" style="background-color: #FFBE15;">
-                    </span>
-                  </label>
-                </li>
-                <li class="colors__item">
-                  <label for="color2" class="colors__label">
-                    <input id="color2" class="colors__radio sr-only" type="radio"
-                     name="color-item" value="gray">
-                    <span class="colors__value" style="background-color: #939393;">
-                  </span></label>
                 </li>
               </ul>
             </fieldset>
@@ -105,7 +91,8 @@
 
             <div class="item__row">
               <div class="form__counter">
-                <button v-show="productAmount > 0" type="button" aria-label="Убрать один товар"
+                <button :disabled="productAmount === 0" type="button"
+                 aria-label="Убрать один товар"
                  @click="productAmount--">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
@@ -228,13 +215,13 @@ export default {
   },
   computed: {
     product() {
-      return this.productData.map((product) => ({
-        ...product,
-        image: product.image.file.url,
-      }));
+      return this.productData;
     },
     category() {
       return this.productData.category;
+    },
+    myColor() {
+      return this.productData.colors;
     },
   },
   methods: {
