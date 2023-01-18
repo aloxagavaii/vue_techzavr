@@ -112,9 +112,12 @@ export default new Vuex.Store({
     deleteCartProduct(context, productId) {
       context.commit('deleteCartProduct', productId);
       return axios
-        .delete('https://vue-study.skillbox.cc/api/baskets/products', productId, {
+        .delete('https://vue-study.skillbox.cc/api/baskets/products', {
           params: {
             userAccessKey: context.state.userAccessKey,
+          },
+          data: {
+            productId,
           },
         })
         .then((response) => {
