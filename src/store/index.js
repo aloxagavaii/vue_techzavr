@@ -9,8 +9,16 @@ export default new Vuex.Store({
     cartProducts: [],
     userAccessKey: null,
     cartProductsData: [],
+    orderInfo: null,
   },
   mutations: {
+    updateOrderInfo(state, orderInfo) {
+      state.orderInfo = orderInfo;
+    },
+    resetCart(state) {
+      state.cartProducts = [];
+      state.cartProductsData = [];
+    },
     updateCartProductAmount(state, { productId, amount }) {
       // eslint-disable-next-line no-shadow
       const item = state.cartProducts.find((item) => item.productId === productId);
@@ -35,6 +43,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    orderInfoPagee(state) {
+      return state.orderInfo.basket.items;
+    },
     cartDetailProducts(state) {
       return state.cartProducts.map((item) => {
         // eslint-disable-next-line prefer-destructuring
@@ -55,6 +66,18 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    loadOrderInfo(context, orderId) {
+      return axios
+      // eslint-disable-next-line
+        .get('https://vue-study.skillbox.cc/api/orders/' + orderId, {
+          params: {
+            userAccessKey: context.state.userAccessKey,
+          },
+        })
+        .then((response) => {
+          context.commit('updateOrderInfo', response.data);
+        });
+    },
     loadCart(context) {
       return axios
         .get('https://vue-study.skillbox.cc/api/baskets', {

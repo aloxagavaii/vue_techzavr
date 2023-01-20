@@ -35,11 +35,6 @@ import gotoPage from '@/helpers/gotoPage';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
-  data() {
-    return {
-
-    };
-  },
   filters: {
     numberFormat,
   },
